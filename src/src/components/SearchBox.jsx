@@ -73,7 +73,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
 
   return (
     <div className={`absolute w-full transition-all duration-700 ${position} z-10`}>
-      <div className="max-w-3xl mx-auto px-4 mt-64 relative">
+      <div className="max-w-3xl mx-auto px-4 mt-84 relative">
         <MagnifyingGlassIcon className="absolute left-7 bottom-3 w-7 h-7 text-gray-400" />
         <input
           type="text"

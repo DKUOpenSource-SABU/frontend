@@ -11,7 +11,6 @@ function Home() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    console.log('currentPath:', currentPath)
     if (currentPath !== '/loading') {
       return;
     }
@@ -32,7 +31,15 @@ function Home() {
 
   return (
     <div className="relative min-h-screen px-6 py-20">
+      <div className='flex justify-center'> 
+
+      {currentPath === '/home' && (
+        <span className="mt-62 text-3xl font-bold">당신의 분산투자, 이제 SABU와 함께 시작해보세요.</span>
+      )}
+      </div>
+      <div>
       <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath} />
+      </div>
       {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} />}
       {currentPath === '/loading' && <ProgressBar progress={progress}/>}
       {currentPath === '/result' && <Result />}
