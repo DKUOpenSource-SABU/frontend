@@ -10,7 +10,7 @@ function Logo() {
 
   return (
     <div className={`absolute transition-all duration-700 ${position}`}>
-      <img src="/logo.svg" alt="Logo" className="w-54" />
+      <img src="logo.svg" alt="Logo" className="w-54" />
     </div>
   )
 }

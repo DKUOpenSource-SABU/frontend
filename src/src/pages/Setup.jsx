@@ -44,10 +44,10 @@ function Setup({ selectedStocks, setSelectedStocks }) {
             />
           </div>
         </div>
-        <div className='flex justify-between mx-auto mt-8 min-h-[40vh] w-full'>
-          <div className='flex flex-col'>
+        <div className='flex flex-wrap justify-between mx-auto mt-8 min-h-[40vh] w-full'>
+          <div className='flex flex-col mx-auto w-1/2'>
             <span className='text-lg font-semibold text-gray-700 py-1'>선택한 종목</span>
-            <ul className="max-w-2xl divide-y border border-gray-400 rounded-xl overflow-hidden min-w-md">
+            <ul className="divide-y border border-gray-400 rounded-xl overflow-hidden mr-2">
               <li className="flex items-center justify-between px-4 py-3 border-gray-400 bg-gray-100 font-semibold text-gray-700">
                 <span className="w-24">섹터</span>
                 <span className="flex-1">티커</span>
@@ -85,7 +85,11 @@ function Setup({ selectedStocks, setSelectedStocks }) {
               ))}
             </ul>
           </div>
-          <div className='max-w-2xl w-1/2 flex flex-col'>
+          <div className='max-w-2xl w-1/2 flex flex-col mx-auto  pb-10'>
+            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
+            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
+            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
+            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
             <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
           </div>
         </div>

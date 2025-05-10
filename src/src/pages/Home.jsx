@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { usePath } from '../contexts/PathContext'
 import Setup from './Setup'
 import ProgressBar from '../components/ProgressBar'
+import Result from './Result'
 
 function Home() {
   const [selectedStocks, setSelectedStocks] = useState([])
@@ -10,6 +11,10 @@ function Home() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    console.log('currentPath:', currentPath)
+    if (currentPath !== '/loading') {
+      return;
+    }
     if (progress >= 100) return;
 
     const timer = setInterval(() => {
@@ -17,7 +22,7 @@ function Home() {
     }, 3000); // 1초마다 10씩 증가
 
     return () => clearInterval(timer);
-  }, [progress]);
+  }, [progress, currentPath]);
 
   const handleAddStock = (stock) => {
     if (!selectedStocks.find((s) => s.symbol === stock.symbol)) {
@@ -30,7 +35,7 @@ function Home() {
       <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath} />
       {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} />}
       {currentPath === '/loading' && <ProgressBar progress={progress}/>}
-      {currentPath === '/result'}
+      {currentPath === '/result' && <Result />}
     </div>
   );
 }
