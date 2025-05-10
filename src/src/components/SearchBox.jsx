@@ -74,6 +74,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
   return (
     <div className={`absolute w-full transition-all duration-700 ${position} z-10`}>
       <div className="max-w-3xl mx-auto px-4 mt-84 relative">
+        {currentPath === '/home' && (<span className="absolute -top-15 left-20 text-3xl font-bold">당신의 분산투자, 이제 SABU와 함께 시작해보세요.</span>)}
         <MagnifyingGlassIcon className="absolute left-7 bottom-3 w-7 h-7 text-gray-400" />
         <input
           type="text"
@@ -139,7 +140,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
         )}
         <button
           onClick={onSubmit}
-          className="absolute cursor-pointer right-7 top-1/2 -translate-y-1/2 bg-[#1C8598] hover:bg-[#00324D] text-white rounded-full p-2 transition-colors">
+          className="absolute cursor-pointer right-7 -bottom-2 -translate-y-1/2 bg-[#1C8598] hover:bg-[#00324D] text-white rounded-full p-2 transition-colors">
           <PaperAirplaneIcon className="w-5 h-5" />
         </button>
       </div>
