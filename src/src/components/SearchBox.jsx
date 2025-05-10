@@ -36,6 +36,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
   let position = 'top-2/7 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
 
   if (currentPath === '/setup') position = 'top-1/14 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+  if (currentPath === '/loading') position = 'hidden'
   if (currentPath === '/result') position = 'hidden'
 
   const handleChange = (e) => {
@@ -71,7 +72,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
   }
 
   return (
-    <div className={`absolute w-full transition-all duration-500 ${position} z-10`}>
+    <div className={`absolute w-full transition-all duration-700 ${position} z-10`}>
       <div className="max-w-3xl mx-auto px-4 mt-64 relative">
         <MagnifyingGlassIcon className="absolute left-7 bottom-3 w-7 h-7 text-gray-400" />
         <input

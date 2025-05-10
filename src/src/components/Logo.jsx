@@ -9,7 +9,7 @@ function Logo() {
   if (currentPath === '/result') position = 'top-1/14 left-1/2 transform -translate-x-1/2'
 
   return (
-    <div className={`absolute transition-all duration-500 ${position}`}>
+    <div className={`absolute transition-all duration-700 ${position}`}>
       <img src="/logo.svg" alt="Logo" className="w-54" />
     </div>
   )
