@@ -13,7 +13,7 @@ const ProgressBar = ({ progress = 90 }) => {
   }, [progress, currentPath]);
   
   return (
-    <div className="flex flex-col justify-center h-screen opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]">
+    <div className="mt-12 flex flex-col justify-center opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]">
       <div className="w-10 h-10 mx-auto border-4 border-[#00324D] border-t-transparent rounded-full animate-spin"></div>
       <div className='flex items-center justify-center'>
         <div className="w-1/2 bg-white p-4 rounded-lg relative">

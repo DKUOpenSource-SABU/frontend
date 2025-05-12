@@ -17,8 +17,8 @@ function Home() {
     if (progress >= 100) return;
 
     const timer = setInterval(() => {
-      setProgress(prev => Math.min(prev + 40, 100));
-    }, 3000); // 1초마다 10씩 증가
+      setProgress(prev => Math.min(prev + 20, 100));
+    }, 1000); // 1초마다 10씩 증가
 
     return () => clearInterval(timer);
   }, [progress, currentPath]);
@@ -30,7 +30,7 @@ function Home() {
   }
 
   return (
-    <div className="relative min-h-screen px-6 py-20">
+    <div className="">
       <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath} />
       {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} />}
       {currentPath === '/loading' && <ProgressBar progress={progress}/>}

@@ -5,7 +5,7 @@ import { usePath } from '../contexts/PathContext'
 function Setup({ selectedStocks, setSelectedStocks }) {
   const { setCurrentPath } = usePath()
   return (
-    <div className="mt-54 opacity-0 animate-[fadeIn_0.4s_ease-out_forwards] z-0"> {/* 혹은 pt-[height]로 맞춰도 됨 */}
+    <div className="opacity-0 animate-[fadeIn_0.4s_ease-out_forwards] z-0"> {/* 혹은 pt-[height]로 맞춰도 됨 */}
       <div className="w-full max-w-5xl mx-auto px-6">
         <h2 className="text-xl font-semibold mb-4">백테스트 설정</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -44,7 +44,7 @@ function Setup({ selectedStocks, setSelectedStocks }) {
             />
           </div>
         </div>
-        <div className='flex flex-wrap justify-between mx-auto mt-8 min-h-[40vh] w-full'>
+        <div className='flex flex-wrap justify-between mx-auto mt-8 w-full'>
           <div className='flex flex-col mx-auto w-1/2'>
             <span className='text-lg font-semibold text-gray-700 py-1'>선택한 종목</span>
             <ul className="divide-y border border-gray-400 rounded-xl overflow-hidden mr-2">
@@ -85,12 +85,9 @@ function Setup({ selectedStocks, setSelectedStocks }) {
               ))}
             </ul>
           </div>
-          <div className='max-w-2xl w-1/2 flex flex-col mx-auto  pb-10'>
+          <div className='max-w-2xl w-1/2 flex flex-col mx-auto '>
             <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
-            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
-            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
-            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
-            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
+            <img src="clustering.png" alt="클러스터링" className="w-full h-auto rounded-xl shadow-md scale-95 hover:scale-100 transition-all duration-300" />
           </div>
         </div>
       </div>
