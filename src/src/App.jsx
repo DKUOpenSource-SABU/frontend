@@ -9,7 +9,7 @@ function App() {
     <PathProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route path="/frontend" element={<Layout />}>
             <Route index element={<Home />} />
           </Route>
         </Routes>
