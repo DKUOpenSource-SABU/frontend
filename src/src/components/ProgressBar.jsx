@@ -1,16 +1,6 @@
 import React from 'react';
-import { usePath } from '../contexts/PathContext';
-import { useEffect } from 'react';
 
 const ProgressBar = ({ progress = 90 }) => {
-  const {currentPath,  setCurrentPath } = usePath();
-
-  useEffect(() => {
-    if (progress >= 100) {
-      setCurrentPath('/result');
-      return ;
-    }
-  }, [progress, currentPath]);
   
   return (
     <div className="mt-12 flex flex-col justify-center opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]">

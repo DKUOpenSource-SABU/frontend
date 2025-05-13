@@ -14,7 +14,11 @@ function Home() {
     if (currentPath !== '/loading') {
       return;
     }
-    if (progress >= 100) return;
+    if (progress >= 100) {
+      setProgress(0);
+      setCurrentPath('/result');
+      return;
+    }
 
     const timer = setInterval(() => {
       setProgress(prev => Math.min(prev + 20, 100));
