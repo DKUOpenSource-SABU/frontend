@@ -1,42 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
+import { callAPI } from '../api/axiosInstance'
 
-const MOCK_SUGGESTIONS = [
-  {
-    symbol: 'QQQ',
-    name: 'Invesco QQQ Trust',
-    price: 439.87,
-    change: +0.42,
-    sector: 'ETF'
-  },
-  {
-    symbol: 'AAPL',
-    name: 'Apple Inc.',
-    price: 181.52,
-    change: +1.12,
-    sector: 'Technology'
-  },
-  {
-    symbol: 'TSLA',
-    name: 'Tesla Inc.',
-    price: 171.23,
-    change: -2.35,
-    sector: 'Automotive'
-  }
-]
+
+const colorClasses = [
+  'text-red-400',
+  'text-blue-400',
+  'text-yellow-400',
+  'text-green-400',
+  'text-purple-400',
+  'text-orange-400',
+];
+
+async function fetchClusterResult(ticker) {
+  const res = await callAPI(`/search/ticker?query=${ticker}`, 'GET');
+  return res.results
+}
 
 function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
   const [query, setQuery] = useState('')
   const [filtered, setFiltered] = useState([])
+  const [suggestions, setSuggestions] = useState([])
+
+  useEffect(() => {
+    const res = fetchClusterResult(query);
+    res.then(data => {
+      setSuggestions(data);
+    });
+  }, [query]);
 
   const handleChange = (e) => {
     const value = e.target.value
     setQuery(value)
     if (value.length > 0) {
-      const matches = MOCK_SUGGESTIONS.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase()) ||
-        item.symbol.toLowerCase().includes(value.toLowerCase())
+      const matches = suggestions.filter((item) =>
+        item.NAME.toLowerCase().includes(value.toLowerCase()) ||
+        item.SYMBOL.toLowerCase().includes(value.toLowerCase())
       )
       setFiltered(matches)
     } else {
@@ -46,7 +46,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
 
   const onSubmit = () => {
     if (query.length === 0) return
-    const selectedStock = MOCK_SUGGESTIONS.find((item) => item.symbol === query)
+    const selectedStock = suggestions.find((item) => item.SYMBOL === query)
 
     if (currentPath === '/setup' || currentPath === '/home') {
       if (selectedStock) {
@@ -87,9 +87,9 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
         </div>
 
         {filtered.length > 0 && (
-          <ul className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden">
+          <ul className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-md overflow-auto max-h-100">
             <li className="flex items-center justify-between px-4 py-3 border-b border-gray-300 text-sm text-gray-600 font-semibold bg-gray-50">
-              <span className="w-24">섹터</span>
+              <span className="w-24">클러스터</span>
               <div className="flex-1 flex gap-4 ml-2">
                 <span>티커</span>
                 <span className="ml-3">이름</span>
@@ -102,19 +102,19 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
                 key={idx}
                 className="flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer text-sm"
                 onClick={() => {
-                  setQuery(item.symbol)
+                  setQuery(item.SYMBOL)
                   setFiltered([])
                 }}
               >
-                <span className="w-24 text-gray-500 truncate">{item.sector}</span>
-                <div className="flex-1 ml-2">
-                  <span className="font-semibold">{item.symbol}</span>
-                  <span className="ml-5 text-gray-600">{item.name}</span>
+                <span className={`w-24 font-semibold ${item.CLUSTER === null ? 'text-gray-500' : colorClasses[item.CLUSTER % colorClasses.length]} truncate`}>{`${item.CLUSTER === null ? 'NULL' : `Cluster ${item.CLUSTER}`}`}</span>
+                <div className="flex-1 ml-2 truncate">
+                  <span className="font-semibold">{item.SYMBOL}</span>
+                  <span className="ml-5 w-25 text-gray-600">{item.NAME}</span>
                 </div>
-                <span className="w-20 text-gray-800">${item.price.toFixed(2)}</span>
-                <span className={`w-16 font-semibold ${item.change >= 0 ? 'text-green-600' : 'text-red-500'}`}>
-                  {item.change > 0 ? '+' : ''}
-                  {item.change.toFixed(2)}%
+                <span className="w-20 text-gray-800">${parseFloat(item["LAST PRICE"].replace('$', '')).toFixed(2)}</span>
+                <span className={`w-16 font-semibold ${item.DELTA === "up" ? 'text-green-600' : 'text-red-500'}`}>
+                  {item.DELTA === "up" ? '+' : ''}
+                  {parseFloat(item["% CHANGE"].replace('%', '')).toFixed(2)}%
                 </span>
               </li>
             ))}
