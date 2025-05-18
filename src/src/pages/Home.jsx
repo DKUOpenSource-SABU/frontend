@@ -28,7 +28,7 @@ function Home() {
   }, [progress, currentPath]);
 
   const handleAddStock = (stock) => {
-    if (!selectedStocks.find((s) => s.symbol === stock.symbol)) {
+    if (!selectedStocks.find((s) => s.SYMBOL === stock.SYMBOL)) {
       setSelectedStocks([...selectedStocks, stock])
     }
   }
@@ -37,8 +37,8 @@ function Home() {
     <div className="">
       <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath} />
       {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} />}
-      {currentPath === '/loading' && <ProgressBar progress={progress}/>}
-      {currentPath === '/result' && <Result />}
+      {currentPath === '/loading' && <ProgressBar progress={progress} />}
+      {currentPath === '/result' && <Result selectedStocks={selectedStocks} />}
     </div>
   );
 }
