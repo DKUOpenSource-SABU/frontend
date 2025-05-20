@@ -1,8 +1,9 @@
 import React from 'react';
-import { Chart as ChartJS, LineElement, PointElement, LinearScale, Tooltip, Legend, Filler } from 'chart.js';
+import { Chart as ChartJS, BubbleController, LineElement, PointElement, LinearScale, Tooltip, Legend, Filler } from 'chart.js';
+
 import { Scatter } from 'react-chartjs-2';
 
-ChartJS.register(LineElement, PointElement, LinearScale, Tooltip, Legend, Filler);
+ChartJS.register(BubbleController, LineElement, PointElement, LinearScale, Tooltip, Legend, Filler);
 
 const colorPalette = [
   'rgba(255, 99, 132, 0.6)',   // Red
@@ -44,7 +45,7 @@ export default function ClusterChart({ data, ratio }) {
     clusterGroups[cluster].push({
       x: node.PC1,
       y: node.PC2,
-      r: ratio.filter(r => r.symbol === node.ticker)[0]?.ratio / 3,
+      r: ratio.filter(r => r.symbol === node.ticker)[0]?.ratio === undefined ? 10 : ratio.filter(r => r.symbol === node.ticker)[0]?.ratio / 3,
       ticker: node.ticker
     });
   });
