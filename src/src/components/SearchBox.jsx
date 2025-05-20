@@ -130,6 +130,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
         {filtered.length > 0 && (
           <ul className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-md overflow-auto max-h-100">
             <li className="flex items-center justify-between px-4 py-3 border-b border-gray-300 text-sm text-gray-600 font-semibold bg-gray-50">
+              <span className="w-24">섹터</span>
               <span className="w-24">클러스터</span>
               <div className="flex-1 flex gap-4 ml-2">
                 <span>티커</span>
@@ -148,14 +149,15 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
                   setFiltered([])
                 }}
               >
+                <span className='w-24 truncate font-base text-xs text-gray-600'>{item.SECTOR}</span>
                 <span className={`w-24 font-semibold ${item.CLUSTER === null ? 'text-gray-500' : colorClasses[item.CLUSTER % colorClasses.length]} truncate`}>{`${item.CLUSTER === null ? 'NULL' : `Cluster ${item.CLUSTER}`}`}</span>
                 <div className="flex-1 ml-2 truncate">
                   <span className="font-semibold">{item.SYMBOL}</span>
                   <span className="ml-5 w-25 text-gray-600">{item.NAME}</span>
                 </div>
                 <span className="w-20 text-gray-800">${parseFloat(item["LAST PRICE"].replace('$', '')).toFixed(2)}</span>
-                <span className={`w-16 font-semibold ${item.DELTA === "up" ? 'text-green-600' : 'text-red-500'}`}>
-                  {item.DELTA === "up" ? '+' : ''}
+                <span className={`w-16 font-semibold ${parseFloat(item["% CHANGE"].replace('%', '')) === 0 ? 'text-gray-600' : 
+                  parseFloat(item["% CHANGE"].replace('%', '')) > 0 ? 'text-green-600' :'text-red-500' }`}>
                   {parseFloat(item["% CHANGE"].replace('%', '')).toFixed(2)}%
                 </span>
               </li>

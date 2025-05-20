@@ -11,6 +11,10 @@ function Home() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    if (currentPath === '/home') {
+      setSelectedStocks([]);
+      setProgress(0);
+    }
     if (currentPath !== '/loading') {
       return;
     }
