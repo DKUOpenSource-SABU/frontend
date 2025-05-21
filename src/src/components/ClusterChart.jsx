@@ -1,5 +1,5 @@
 import React from 'react';
-import { Chart as ChartJS, BubbleController, LineElement, PointElement, LinearScale, Tooltip, Legend, Filler } from 'chart.js';
+import { Chart as ChartJS, Chart, BubbleController, LineElement, PointElement, LinearScale, Tooltip, Legend, Filler } from 'chart.js';
 
 import { Scatter } from 'react-chartjs-2';
 
@@ -50,18 +50,18 @@ export default function ClusterChart({ data, ratio }) {
     });
   });
   const clusterHighlightDataset = Object.entries(clusterGroups).map(([cluster, points]) => {
-  const clusterIdx = parseInt(cluster, 10);
-  const color = colorPalette[clusterIdx % colorPalette.length] || 'gray';
+    const clusterIdx = parseInt(cluster, 10);
+    const color = colorPalette[clusterIdx % colorPalette.length] || 'gray';
 
-  return {
-    label: `Cluster ${cluster}`,
-    type: 'bubble',
-    data: points,
-    backgroundColor: color,
-    borderColor: color,
-    borderWidth: 1
-  };
-});
+    return {
+      label: `Cluster ${cluster}`,
+      type: 'bubble',
+      data: points,
+      backgroundColor: color,
+      borderColor: color,
+      borderWidth: 1
+    };
+  });
 
   const chartData = {
     datasets: [...clusterDatasets, ...clusterHighlightDataset]
@@ -75,7 +75,33 @@ export default function ClusterChart({ data, ratio }) {
           label: ctx => ctx.raw.ticker || `(${ctx.raw.x.toFixed(2)}, ${ctx.raw.y.toFixed(2)})`
         }
       },
-      legend: { display: true }
+      legend: {
+        display: 'grid',
+        position: 'top',
+        labels: {
+          boxWidth: 40,
+          generateLabels: function (chart) {
+            const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+
+            return labels.sort((a, b) => {
+              const getTypePriority = (type) => {
+                if (type === 'line') return 0;
+                if (type === 'scatter') return 1;
+                return 2; // 기타 타입들
+              };
+
+              const aType = chart.data.datasets[a.datasetIndex].type || 'line';
+              const bType = chart.data.datasets[b.datasetIndex].type || 'line';
+
+              const typeCompare = getTypePriority(aType) - getTypePriority(bType);
+              if (typeCompare !== 0) return typeCompare;
+
+              // 같은 타입이면 이름순 정렬
+              return a.text.localeCompare(b.text);
+            });
+          }
+        }
+      }
     },
     scales: {
       x: {
