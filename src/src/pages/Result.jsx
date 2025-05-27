@@ -3,9 +3,9 @@ import { useCluster } from '../contexts/ClusterContext'
 import ClusterView from '../components/ClusterView';
 import BacktestDashboard from '../components/BacktestDashboard';
 
-function Result({ selectedStocks }) {
+function Result({ selectedStocks, backTestData }) {
 
-  const { data, ratio } = useCluster();
+  const { ratio } = useCluster();
 
   return (
     <div className='max-w-5xl mx-auto opacity-0 animate-[fadeIn_0.4s_ease-out_forwards] z-0'>
@@ -13,10 +13,10 @@ function Result({ selectedStocks }) {
       <div className='flex flex-wrap justify-between '>
         <StockTable selectedStocks={selectedStocks} ratio={ratio} />
         <div className='w-1/2'>
-          <ClusterView selectedStocks={selectedStocks}/>
+          <ClusterView selectedStocks={selectedStocks} />
         </div>
       </div>
-      <BacktestDashboard />
+      <BacktestDashboard strategies={backTestData} />
     </div>
   );
 }

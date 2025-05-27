@@ -17,7 +17,7 @@ const colorClasses = [
   'text-orange-400',
 ];
 
-function Setup({ selectedStocks, setSelectedStocks }) {
+function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
   const { setCurrentPath } = usePath()
   const { setData, ratio, updateRatio, setRatio } = useCluster();
   const [formData, setFormData] = useState({
@@ -26,8 +26,6 @@ function Setup({ selectedStocks, setSelectedStocks }) {
     initialCapital: '',
     commission: '',
   });
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,12 +60,26 @@ function Setup({ selectedStocks, setSelectedStocks }) {
     }
     try {
       // API 호출
+      callAPI('/backtest', 'POST', {
+        inital_cash: formData.initialCapital,
+        commission: formData.commission,
+        start_date: formData.startDate,
+        end_date: formData.endDate,
+        rebalance: 'none',
+        portfolio: selectedStocks.map(stock => ({
+          ticker: stock.SYMBOL,
+          weight: ratio.find(r => r.symbol === stock.SYMBOL)?.ratio || 0
+        })).then((portfolio) => {
+          setBacktestData(portfolio);
+        }).catch((err) => {
+          console.error('Error backtest data:', err);
+        })
+      });
       setCurrentPath('/loading');
     } catch (error) {
       console.error('Error during API call:', error);
     }
   };
-
 
   useEffect(() => {
     callAPI('/cluster/analyze?pre=true', 'POST', {
@@ -132,70 +144,70 @@ function Setup({ selectedStocks, setSelectedStocks }) {
             </ul>
           </div>
           <div className="max-w-1/2 w-full flex flex-col p-2">
-              <ClusterView selectedStocks={selectedStocks}/>
+            <ClusterView selectedStocks={selectedStocks} />
+          </div>
+        </div>
+        <h2 className="text-xl font-semibold mb-4">백테스트 설정</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">시작 날짜</label>
+            <input
+              type="date"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">종료 날짜</label>
+            <input
+              type="date"
+              name="endDate"
+              value={formData.endDate}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">초기 자본 ($)</label>
+            <input
+              type="number"
+              name="initialCapital"
+              value={formData.initialCapital}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="ex) 10000"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">수수료 (%)</label>
+            <input
+              type="number"
+              name="commission"
+              value={formData.commission}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="ex) 0.1"
+              step="0.01"
+              max={100}
+            />
+          </div>
+        </div>
+        <div className='flex justify-center mb-10'>
+          <button
+            className="mx-auto mt-4 cursor-pointer translate-y-1/2 bg-[#1C8598] hover:bg-[#00324D] text-white rounded-xl px-10 py-2 transition-colors"
+            onClick={() => {
+              handleSubmit();
+            }}
+          >
+            백테스트
+          </button>
         </div>
       </div>
-      <h2 className="text-xl font-semibold mb-4">백테스트 설정</h2>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">시작 날짜</label>
-          <input
-            type="date"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">종료 날짜</label>
-          <input
-            type="date"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">초기 자본 ($)</label>
-          <input
-            type="number"
-            name="initialCapital"
-            value={formData.initialCapital}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="ex) 10000"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">수수료 (%)</label>
-          <input
-            type="number"
-            name="commission"
-            value={formData.commission}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="ex) 0.1"
-            step="0.01"
-            max={100}
-          />
-        </div>
-      </div>
-      <div className='flex justify-center mb-10'>
-        <button
-          className="mx-auto mt-4 cursor-pointer translate-y-1/2 bg-[#1C8598] hover:bg-[#00324D] text-white rounded-xl px-10 py-2 transition-colors"
-          onClick={() => {
-            handleSubmit();
-          }}
-        >
-          백테스트
-        </button>
-      </div>
-    </div>
 
     </div >
   )

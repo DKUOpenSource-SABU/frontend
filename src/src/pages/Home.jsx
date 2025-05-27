@@ -9,6 +9,7 @@ function Home() {
   const [selectedStocks, setSelectedStocks] = useState([])
   const { currentPath, setCurrentPath } = usePath()
   const [progress, setProgress] = useState(0);
+  const [backtestData, setBacktestData] = useState();
 
   useEffect(() => {
     if (currentPath === '/home') {
@@ -39,10 +40,10 @@ function Home() {
 
   return (
     <div className="">
-      <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath} />
-      {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} />}
+      <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath}  selectedStock={selectedStocks}/>
+      {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} setBacktestData={setBacktestData} />}
       {currentPath === '/loading' && <ProgressBar progress={progress} />}
-      {currentPath === '/result' && <Result selectedStocks={selectedStocks} />}
+      {currentPath === '/result' && <Result selectedStocks={selectedStocks} backTestData={backtestData} />}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { use, useEffect, useRef, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { callAPI } from '../api/axiosInstance'
@@ -14,20 +14,14 @@ const colorClasses = [
   'text-orange-400',
 ];
 
-const recommended = [
-  { SECTOR: 'Tech', CLUSTER: 1, SYMBOL: 'AAPL', NAME: 'Apple Inc.', 'LAST PRICE': '$189.25', '% CHANGE': '0.57%' },
-  { SECTOR: 'Finance', CLUSTER: 2, SYMBOL: 'JPM', NAME: 'JPMorgan Chase', 'LAST PRICE': '$153.80', '% CHANGE': '-0.12%' },
-  { SECTOR: 'Energy', CLUSTER: 3, SYMBOL: 'XOM', NAME: 'Exxon Mobil', 'LAST PRICE': '$113.12', '% CHANGE': '0.25%' }
-];
 
-
-
-function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
+function SearchBox({ currentPath, onSearchSubmit, setCurrentPath, selectedStock }) {
   const [query, setQuery] = useState('')
   const [filtered, setFiltered] = useState([])
   const [suggestions, setSuggestions] = useState([])
   const [selectedClusters, setSelectedClusters] = useState([])
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [recommended, setRecommended] = useState([]);
   const debounceTimeout = useRef(null);
   const isManualSelection = useRef(false);
 
@@ -55,6 +49,29 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath }) {
       return [];
     }
   }
+
+  const fetchRecommended = async () => {
+    try {
+      const res = await callAPI('/cluster/recommend', 'POST', JSON.stringify({
+        tickers : selectedStock.map((item) => item.SYMBOL)
+      }), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return res;
+    } catch (error) {
+      console.error('Error fetching recommended stocks:', error);
+      return [];
+    }
+  }
+
+  useEffect(() => {
+    fetchRecommended().then((res) => {
+      console.log('Recommended stocks fetched:', res);
+      setRecommended(res);
+    });
+  }, [selectedStock]);
 
   useEffect(() => {
     if (debouncedQuery.trim() === '') {

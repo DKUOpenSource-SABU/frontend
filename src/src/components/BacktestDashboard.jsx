@@ -16,63 +16,15 @@ import clsx from 'clsx';
 
 ChartJS.register(LineElement, BarElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, ArcElement);
 
-let strategies = Array.from({ length: 9 }).map((_, i) => ({
-  strategy: `strategy_${i + 1}`,
-  rebalance: i % 3 === 0 ? 'none' : i % 3 === 1 ? 'monthly' : 'quarterly',
-  initial_balance: 10000000,
-  final_balance: 10000000 + i * 1000000 + (i % 2 === 0 ? 500000 : 250000),
-  total_return: 10 + i * 5 + (i % 2 === 0 ? 2.5 : -50),
-  cagr: 5 + i,
-  max_drawdown: 10 + i,
-  portfolio_growth: [
-    { date: '2020-01-01', value: 10000000 },
-    { date: '2020-12-31', value: 10000000 + i * 1000000 }
-  ],
-  drawdown_series: [
-    { date: '2020-01-01', drawdown: 0.0 },
-    { date: '2020-06-01', drawdown: -1.5 * i }
-  ],
-  annual_returns: {
-    2020: 5 + i,
-    2021: 8 + i * 1.5 * -1.2,
-    2022: 6 + i * 0.8,
-    2023: 8 + i * 1.5 * -1.2,
-  },
-  assets: [
-    {
-      ticker: 'AAPL',
-      weight: 0.2,
-      start_price: 75.0,
-      end_price: 160.0,
-      return_pct: 113.3,
-      initial_investment: 2000000,
-      final_value: 4266000,
-      contribution_pct: 35.5
-    },
-    {
-      ticker: 'GOOGL',
-      weight: 0.3,
-      start_price: 1200.0,
-      end_price: 2400.0,
-      return_pct: 100.0,
-      initial_investment: 3000000,
-      final_value: 6000000,
-      contribution_pct: 40.0
-    }
-  ]
-}));
 
-strategies = strategies.sort((a, b) => b.total_return - a.total_return);
-
-export default function BacktestDashboard() {
+export default function BacktestDashboard({ strategies }) {
+  strategies = strategies.sort((a, b) => b.total_return - a.total_return);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const bestIndex = strategies.reduce((maxIdx, cur, idx, arr) =>
     cur.total_return > arr[maxIdx].total_return ? idx : maxIdx, 0);
 
   const {
-    strategy,
-    rebalance,
     initial_balance,
     final_balance,
     total_return,
