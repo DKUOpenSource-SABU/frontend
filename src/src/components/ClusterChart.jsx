@@ -18,9 +18,18 @@ const colorPalette = [
 export default function ClusterChart({ data, ratio }) {
   // 1. 클러스터 윤곽선을 line+fill로 구성
   const clusterDatasets = data.hull_coords.map((cluster) => {
-    const hull = [...cluster.hull_coords, cluster.hull_coords[0]]; // 닫힌 다각형
-    const borderColor = colorPalette[cluster.cluster % colorPalette.length]; // 팔레트 순환 사용
-    const backgroundColor = borderColor.replace(', 0.6)', ', 0.15)');
+    let borderColor;
+    let backgroundColor;
+    let hull
+    if (cluster.cluster < 0) {
+      borderColor = 'rgba(128, 128, 128, 0.6)'; // 회색
+      backgroundColor = 'rgba(128, 128, 128, 0.15)'; // 회색
+      hull = [];
+    } else {
+      hull = [...cluster.hull_coords, cluster.hull_coords[0]]; // 닫힌 다각형
+      borderColor = colorPalette[cluster.cluster % colorPalette.length]; // 팔레트 순환 사용
+      backgroundColor = borderColor.replace(', 0.6)', ', 0.15)');
+    }
 
     return {
       label: `Cluster ${cluster.cluster}`,
