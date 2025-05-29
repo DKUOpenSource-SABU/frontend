@@ -60,20 +60,22 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
     }
     try {
       // API 호출
+      console.log(selectedStocks, ratio);
+      const portfolio = selectedStocks.map(stock => ({
+        ticker: stock.SYMBOL,
+        weight: ratio.find(r => r.symbol === stock.SYMBOL)?.ratio || 0
+      }));
       callAPI('/backtest', 'POST', {
-        inital_cash: formData.initialCapital,
+        initial_cash: formData.initialCapital,
         commission: formData.commission,
         start_date: formData.startDate,
         end_date: formData.endDate,
         rebalance: 'none',
-        portfolio: selectedStocks.map(stock => ({
-          ticker: stock.SYMBOL,
-          weight: ratio.find(r => r.symbol === stock.SYMBOL)?.ratio || 0
-        })).then((portfolio) => {
-          setBacktestData(portfolio);
-        }).catch((err) => {
-          console.error('Error backtest data:', err);
-        })
+        portfolio: portfolio
+      }).then((res) => {
+        setBacktestData(res.results);
+      }).catch((err) => {
+        console.error('Error backtest data:', err);
       });
       setCurrentPath('/loading');
     } catch (error) {

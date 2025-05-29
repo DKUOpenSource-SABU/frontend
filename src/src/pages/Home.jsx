@@ -4,16 +4,20 @@ import { usePath } from '../contexts/PathContext'
 import Setup from './Setup'
 import ProgressBar from '../components/ProgressBar'
 import Result from './Result'
+import { useCluster } from '../contexts/ClusterContext'
 
 function Home() {
   const [selectedStocks, setSelectedStocks] = useState([])
   const { currentPath, setCurrentPath } = usePath()
   const [progress, setProgress] = useState(0);
   const [backtestData, setBacktestData] = useState();
+  const { setRatio, setData } = useCluster();
 
   useEffect(() => {
     if (currentPath === '/home') {
       setSelectedStocks([]);
+      setRatio([]);
+      setData(null);
       setProgress(0);
     }
     if (currentPath !== '/loading') {
