@@ -33,7 +33,7 @@ export default function BacktestDashboard({ strategies }) {
     portfolio_growth,
     drawdown_series,
     annual_returns,
-    assets
+    assets,
   } = strategies[selectedIndex];
 
   const annualData = {
@@ -192,26 +192,45 @@ export default function BacktestDashboard({ strategies }) {
           </div>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto whitespace-nowrap bg-gray-100 px-2 py-2 rounded-xl">
+        <div className="flex gap-4 overflow-x-auto whitespace-nowrap bg-gray-100 px-4 py-6 rounded-xl">
           {strategies.map((s, i) => (
             <button
               key={i}
               onClick={() => setSelectedIndex(i)}
-              className={`px-3 py-1 rounded-full text-sm font-semibold shadow-sm transition-all ${i === selectedIndex ? 'bg-blue-400 text-white' : 'bg-white text-black'
-                }`}
+              className={`relative w-48 px-4 py-3 rounded-xl text-sm font-medium shadow-md text-left transition-all overflow-visible
+    ${i === selectedIndex ? 'bg-blue-400 text-white' : 'bg-white text-black'}`}
             >
-              {s.strategy.replace(/_/g, ' ')} + {s.rebalance} {i === bestIndex ? '👑' : ''}
+              {/* 🥇 매달 왼쪽 상단에 고정 */}
+              <div className="absolute -top-3 -left-3 flex flex-col items-center animate-drop-in">
+                {/* 메달 */}
+                <div
+                  className={`rounded-full px-2 py-1 text-xs font-bold shadow-md border
+        ${i === 0 ? 'bg-yellow-300 text-yellow-900 border-yellow-500' :
+                      i === 1 ? 'bg-gray-300 text-gray-800 border-gray-500' :
+                        i === 2 ? 'bg-amber-400 text-white border-amber-500' :
+                          'bg-white text-black border-gray-300'}`}
+                >
+                  {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`}
+                </div>
+              </div>
+
+              <div className="mb-1">
+                🧠 <span className="font-semibold">전략 :</span> {s.strategy.replace(/_/g, ' ')}
+              </div>
+              <div>
+                🔄 <span className="font-semibold">리밸런싱 :</span> {s.rebalance}
+              </div>
             </button>
           ))}
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <StatCard label="초기 자산" value={`$${initial_balance.toLocaleString()}`} />
-        <StatCard label="최종 자산" value={`$${final_balance.toLocaleString()}`} />
-        <StatCard label="총 수익률" value={`${total_return}%`} color={`${total_return < 0 ? 'red' : 'green'}`} tooltip="투자 기간 전체 수익률" />
-        <StatCard label="CAGR" value={`${cagr}%`} tooltip="연평균 복리 수익률 (Compound Annual Growth Rate)" />
-        <StatCard label="최대 낙폭" value={`${max_drawdown}%`} color="red" tooltip="최대 손실 비율 (고점 대비 하락률)" />
+        <StatCard label="초기 자산" value={`$${parseInt(initial_balance).toLocaleString()}`} />
+        <StatCard label="최종 자산" value={`$${parseInt(final_balance).toLocaleString()}`} />
+        <StatCard label="총 수익률" value={`${parseFloat(total_return).toFixed(2)}%`} color={`${total_return < 0 ? 'red' : 'green'}`} tooltip="투자 기간 전체 수익률" />
+        <StatCard label="CAGR" value={`${parseFloat(cagr).toFixed(2)}%`} tooltip="연평균 복리 수익률 (Compound Annual Growth Rate)" />
+        <StatCard label="최대 낙폭" value={`${(parseFloat(max_drawdown) * -1).toFixed(2)}%`} color="red" tooltip="최대 손실 비율 (고점 대비 하락률)" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -246,10 +265,10 @@ export default function BacktestDashboard({ strategies }) {
               {assets.map((a, i) => (
                 <tr key={i} className="text-center border-t">
                   <td className="font-bold text-gray-800 py-2">{a.ticker}</td>
-                  <td>${a.start_price}</td>
-                  <td>${a.end_price}</td>
-                  <td className={`${parseInt(a.return_pct) < 0 ? 'text-red-600' : 'text-green-600'}`}>{a.return_pct}%</td>
-                  <td>{a.contribution_pct}%</td>
+                  <td>${parseFloat(a.start_price).toFixed(2)}</td>
+                  <td>${parseFloat(a.end_price).toFixed(2)}</td>
+                  <td className={`${parseInt(a.return_pct) < 0 ? 'text-red-600' : 'text-green-600'}`}>{parseFloat(a.return_pct).toFixed(2)}%</td>
+                  <td>{parseFloat(a.contribution_pct).toFixed(2)}%</td>
                 </tr>
               ))}
             </tbody>
