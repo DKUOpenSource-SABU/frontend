@@ -1,9 +1,8 @@
-import React from 'react';
 
 const ALL_SECTORS = [
   "Technology",
   "Telecommunications",
-  "Healthcare",
+  "Health Care",
   "Finance",
   "Real Estate",
   "Consumer Discretionary",

@@ -43,7 +43,8 @@ export default function LineCloseChart({ stockData }) {
         fill: true,
         pointRadius: 0,
         pointHoverRadius: 0,
-        tension: 0.3
+        tension: 0.3,
+        showLabel: false 
       },
     ],
   };

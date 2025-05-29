@@ -3,10 +3,14 @@ import { Tab } from '@headlessui/react'
 import Spinner from '../components/Spinner';
 import ClusterChart from '../components/ClusterChart'
 import SectorHeatmap from "./SectorHeatmap";
+import { useEffect, useState } from "react";
+import { callAPI } from "../api/axiosInstance";
+import SectorScatterChart from "./SectorChart";
 
-function ClusterView({selectedStocks}) {
+function ClusterView({ selectedStocks }) {
 
   const { data, ratio } = useCluster();
+  const [sectorsData, setSectorsData] = useState(null);
 
   const fullStars = 3
   const emptyStars = 5 - fullStars;
@@ -16,6 +20,15 @@ function ClusterView({selectedStocks}) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
+
+  useEffect(() => {
+    callAPI('/cluster/sectors', 'GET').then(response => {
+      setSectorsData(response.sectors);
+    }).catch(error => {
+      console.error("Error fetching sector data:", error);
+    });
+  }, []);
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -69,7 +82,7 @@ function ClusterView({selectedStocks}) {
             {data ? <ClusterChart data={data} ratio={ratio} /> : <Spinner />}
           </Tab.Panel>
           <Tab.Panel className="w-full h-auto rounded-xl shadow-md scale-95 hover:scale-100 transition-all duration-300">
-            {data ? <ClusterChart data={data} ratio={ratio} /> : <Spinner />}
+            {sectorsData ? <SectorScatterChart sectorData={sectorsData} /> : <Spinner />}
           </Tab.Panel>
           <Tab.Panel className="w-full h-auto rounded-xl shadow-md ">
             <SectorHeatmap selectedStocks={selectedStocks} />
