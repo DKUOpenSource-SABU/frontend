@@ -49,6 +49,12 @@ function Home() {
       {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} setBacktestData={setBacktestData} />}
       {currentPath === '/loading' && <ProgressBar progress={progress} />}
       {currentPath === '/result' && <Result selectedStocks={selectedStocks} backTestData={backtestData} />}
+      {currentPath === '/home' && (
+        <div className="flex flex-col items-center justify-center mt-12">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">현재 리더보드</h2>
+          <LeaderboardTicker />
+        </div>
+      )}
     </div>
   );
 }

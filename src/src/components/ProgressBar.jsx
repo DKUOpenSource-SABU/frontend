@@ -21,7 +21,7 @@ const ProgressBar = ({ progress = 90 }) => {
         </div>
       </div>
       <div className='flex justify-center'>
-        <h2 className='text-xl font-semibold text-gray-900 mb-2'>현재 리더보드</h2>
+        <h2 className='text-xl font-semibold text-gray-900 mb-2 mt-5'>현재 리더보드</h2>
       </div>
       <LeaderboardTicker />
     </div>

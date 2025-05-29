@@ -7,6 +7,7 @@ import { useCluster } from '../contexts/ClusterContext'
 import TickerDetail from '../components/TickerDetail';
 import ClusterView from '../components/ClusterView';
 import MonthPicker from '../components/MonthPicker';
+import { format, parseISO } from "date-fns";
 
 
 const colorClasses = [
@@ -22,8 +23,8 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
   const { setCurrentPath } = usePath()
   const { setData, ratio, updateRatio, setRatio } = useCluster();
   const [formData, setFormData] = useState({
-    startDate: '',
-    endDate: '',
+    startDate: '2025-01-01',
+    endDate: '2025-05-01',
     initialCapital: '',
     commission: '',
   });
@@ -84,8 +85,8 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
       callAPI('/backtest', 'POST', {
         initial_cash: formData.initialCapital,
         commission: formData.commission,
-        start_date: formData.startDate,
-        end_date: formData.endDate,
+        start_date: format(parseISO(formData.startDate), "yyyy-MM-dd"),
+        end_date: format(parseISO(formData.endDate), "yyyy-MM-dd"),
         rebalance: 'none',
         portfolio: portfolio
       }).then((res) => {

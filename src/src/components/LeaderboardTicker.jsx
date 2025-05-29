@@ -1,109 +1,26 @@
-import React, { useEffect, useState } from "react";
-
-const dummyData = [
-  {
-  "total_return": 16.15723389730942,
-  "strategy": {
-    "strategy": "rsi",
-    "rebalance": "quarterly",
-    "initial_balance": 1000,
-    "final_balance": 1161.5723389730942,
-    "total_return": 16.15723389730942,
-    "cagr": 0,
-    "max_drawdown": 18.72,
-    "assets": [
-      {
-        "ticker": "AAPL",
-        "weight": 1
-      }
-    ]
-  }
-},{
-  "total_return": 16.15723389730942,
-  "strategy": {
-    "strategy": "rsi",
-    "rebalance": "quarterly",
-    "initial_balance": 1000,
-    "final_balance": 1161.5723389730942,
-    "total_return": 16.15723389730942,
-    "cagr": 0,
-    "max_drawdown": 18.72,
-    "assets": [
-      {
-        "ticker": "AAPL",
-        "weight": 1
-      }
-    ]
-  }
-},{
-  "total_return": 16.15723389730942,
-  "strategy": {
-    "strategy": "rsi",
-    "rebalance": "quarterly",
-    "initial_balance": 1000,
-    "final_balance": 1161.5723389730942,
-    "total_return": 16.15723389730942,
-    "cagr": 0,
-    "max_drawdown": 18.72,
-    "assets": [
-      {
-        "ticker": "AAPL",
-        "weight": 1
-      }
-    ]
-  }
-},{
-  "total_return": 166.15723389730942,
-  "strategy": {
-    "strategy": "rsi",
-    "rebalance": "quarterly",
-    "initial_balance": 1000,
-    "final_balance": 1161.5723389730942,
-    "total_return": 16.15723389730942,
-    "cagr": 0,
-    "max_drawdown": 18.72,
-    "assets": [
-      {
-        "ticker": "AAPL",
-        "weight": 1
-      },
-
-      {
-        "ticker": "AAPL",
-        "weight": 1
-      },
-
-      {
-        "ticker": "a",
-        "weight": 1
-      },
-
-      {
-        "ticker": "b",
-        "weight": 1
-      },
-
-      {
-        "ticker": "c",
-        "weight": 1
-      }
-    ]
-  }
-},
-  // 원하면 더 추가 가능
-];
+import { useEffect, useState } from "react";
+import { callAPI } from "../api/axiosInstance";
 
 const medals = ["🥇", "🥈", "🥉"];
 
-const LeaderboardTicker = ({ data = dummyData}) => {
-  const top3 = [...data]
-    .sort((a, b) => b.total_return - a.total_return)
-    .slice(0, 3);
+const LeaderboardTicker = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    callAPI('/backtest/leaderboard', 'GET')
+      .then(response => {
+        const top3 = response.leaderboard.sort((a, b) => b.total_return - a.total_return).slice(0, 3);
+        setData(top3);
+      })
+      .catch(error => {
+        console.error("Error fetching leaderboard data:", error);
+      });
+  }, [])
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {top3.map((item, i) => (
+        {data.map((item, i) => (
           <div
             key={i}
             className="relative bg-white rounded-2xl shadow-md p-6 border border-gray-200 hover:shadow-lg transition-all"
