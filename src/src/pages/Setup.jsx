@@ -166,7 +166,7 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
           </div>
         </div>
         <h2 className="text-xl font-semibold mb-4">백테스트 설정</h2>
-        <div className="grid grid-cols-2 gap-4 w-full pb-56">
+        <div className="grid grid-cols-2 gap-4 w-full pb-42">
           <div className="w-full">
             <MonthPicker
               label="📅 시작 월"

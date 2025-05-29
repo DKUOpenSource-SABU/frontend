@@ -193,23 +193,57 @@ function TickerDetail({ selectedStocks }) {
           </div>
           <div className='h-1/2'>
             <p className="text-sm text-gray-700"></p>
-            <h3 className="text-lg font-semibold mb-2 flex items-center">
-              {/* 뉴스 SVG 아이콘 */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
-                <path d="M7 9h10M7 13h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-              뉴스
+            <h3 className="text-lg font-semibold mb-2 flex items-center justify-between">
+              {/* 왼쪽: 뉴스 아이콘 + 제목 */}
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <path d="M7 9h10M7 13h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                뉴스
+              </div>
+
+              {/* 오른쪽: 감정 통계 */}
+              {currentData.news && currentData.news.sentiment_counts && (
+                <div className="text-sm text-gray-700 space-x-2 flex items-center">
+                  <span className="text-gray-500">총 {currentData.news.sentiment_counts.positive + currentData.news.sentiment_counts.neutral + currentData.news.sentiment_counts.negative}건</span>
+                  <span className="text-green-600">🟢 {currentData.news.sentiment_counts.positive}</span>
+                  <span className="text-gray-600">⚪️ {currentData.news.sentiment_counts.neutral}</span>
+                  <span className="text-red-600">🔴 {currentData.news.sentiment_counts.negative}</span>
+                </div>
+              )}
+
             </h3>
             <hr className="flex-1 border-gray-300 mb-2" />
             <div className='mb-6'>
               {loading ? <Spinner /> : (
                 <ul className="space-y-2 overflow-auto max-h-36 p-2">
-                  {currentData.news && currentData.news.length > 0 ? (currentData.news).map((news, idx) => (
-                    <li key={idx} className="text-sm shadow p-3 rounded-lg hover:bg-gray-50 cursor-default">
-                      <strong>{news.title}</strong>{' '}
-                      <span className="text-gray-500">({news.source})</span>
+                  {currentData.news.results && currentData.news.results.length > 0 ? (currentData.news.results).map((news, idx) => (
+                    <li
+                      key={idx}
+                      className="text-sm shadow p-3 rounded-lg hover:bg-gray-50 cursor-default space-y-2"
+                    >
+                      <div>
+                        <strong>{news.title}</strong>{' '}
+                        <span className="text-gray-500">({news.source})</span>
+                      </div>
+
+                      <div
+                        className={`w-fit px-2 py-1 rounded-md text-xs font-medium
+                            ${news.sentiment === 'positive'
+                            ? 'bg-green-50 text-green-700'
+                            : news.sentiment === 'negative'
+                              ? 'bg-red-50 text-red-700'
+                              : 'bg-gray-100 text-gray-600'
+                          }`}
+                      >
+                        {news.sentiment === 'positive' && '🟢 긍정적인 뉴스예요!'}
+                        {news.sentiment === 'neutral' && '⚪️ 중립적인 의견이에요.'}
+                        {news.sentiment === 'negative' && '🔴 부정적인 의견이에요.'}
+                      </div>
                     </li>
+
+
                   )) : <li className="flex justify-center text-base text-gray-500">뉴스가 없습니다...</li>}
                 </ul>
               )}

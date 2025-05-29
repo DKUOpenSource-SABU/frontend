@@ -43,6 +43,35 @@
     }
   }
 
+ .perspective {
+    perspective: 1000px;
+  }
+
+  .transform-style {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  @keyframes flip {
+    0% {
+      transform: rotateX(90deg);
+      opacity: 0;
+    }
+
+    100% {
+      transform: rotateX(0deg);
+      opacity: 1;
+    }
+  }
+
+  .animate-flip {
+    animation: flip 0.6s ease-out;
+  }
+
+
 
 
 }

@@ -6,7 +6,6 @@ import SectorHeatmap from "./SectorHeatmap";
 import { useEffect, useState } from "react";
 import { callAPI } from "../api/axiosInstance";
 import SectorScatterChart from "./SectorChart";
-import { set } from "date-fns";
 
 function ClusterView({ selectedStocks }) {
 

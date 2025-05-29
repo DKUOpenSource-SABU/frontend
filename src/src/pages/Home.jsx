@@ -5,6 +5,7 @@ import Setup from './Setup'
 import ProgressBar from '../components/ProgressBar'
 import Result from './Result'
 import { useCluster } from '../contexts/ClusterContext'
+import LeaderboardTicker from '../components/LeaderboardTicker'
 
 function Home() {
   const [selectedStocks, setSelectedStocks] = useState([])
