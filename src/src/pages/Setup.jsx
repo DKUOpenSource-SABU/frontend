@@ -1,12 +1,12 @@
 
 import { TrashIcon } from '@heroicons/react/24/solid'
 import { usePath } from '../contexts/PathContext'
-import ClusterChart from '../components/ClusterChart'
 import { useEffect, useState } from 'react';
 import { callAPI } from '../api/axiosInstance'
 import { useCluster } from '../contexts/ClusterContext'
 import TickerDetail from '../components/TickerDetail';
-import Spinner from '../components/Spinner';
+import ClusterView from '../components/ClusterView';
+
 
 const colorClasses = [
   'text-red-400',
@@ -17,9 +17,9 @@ const colorClasses = [
   'text-orange-400',
 ];
 
-function Setup({ selectedStocks, setSelectedStocks }) {
+function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
   const { setCurrentPath } = usePath()
-  const { data, setData, ratio, updateRatio } = useCluster();
+  const { setData, ratio, updateRatio, setRatio } = useCluster();
   const [formData, setFormData] = useState({
     startDate: '',
     endDate: '',
@@ -54,17 +54,32 @@ function Setup({ selectedStocks, setSelectedStocks }) {
       return;
     }
     if (totalRatio !== 100) {
+      console.log('Total Ratio:', ratio);
       alert('비율의 합이 100이 되어야 합니다.');
       return;
     }
     try {
       // API 호출
+      callAPI('/backtest', 'POST', {
+        inital_cash: formData.initialCapital,
+        commission: formData.commission,
+        start_date: formData.startDate,
+        end_date: formData.endDate,
+        rebalance: 'none',
+        portfolio: selectedStocks.map(stock => ({
+          ticker: stock.SYMBOL,
+          weight: ratio.find(r => r.symbol === stock.SYMBOL)?.ratio || 0
+        })).then((portfolio) => {
+          setBacktestData(portfolio);
+        }).catch((err) => {
+          console.error('Error backtest data:', err);
+        })
+      });
       setCurrentPath('/loading');
     } catch (error) {
       console.error('Error during API call:', error);
     }
   };
-
 
   useEffect(() => {
     callAPI('/cluster/analyze?pre=true', 'POST', {
@@ -118,6 +133,7 @@ function Setup({ selectedStocks, setSelectedStocks }) {
                   <button
                     onClick={() => {
                       setSelectedStocks((prev) => prev.filter((_, i) => i !== idx))
+                      setRatio((prev) => prev.filter((r) => r.symbol !== item.SYMBOL))
                     }}
                     className="text-gray-400 hover:text-red-600 transition-colors ml-2"
                   >
@@ -127,11 +143,8 @@ function Setup({ selectedStocks, setSelectedStocks }) {
               ))}
             </ul>
           </div>
-          <div className='max-w-2xl w-1/2 flex flex-col p-2'>
-            <span className='text-lg font-semibold text-gray-700 py-1'>클러스터링</span>
-            <div className="w-full h-auto rounded-xl shadow-md scale-95 hover:scale-100 transition-all duration-300">
-              {data ? <ClusterChart data={data} ratio={ratio} /> : <Spinner />}
-            </div>
+          <div className="max-w-1/2 w-full flex flex-col p-2">
+            <ClusterView selectedStocks={selectedStocks} />
           </div>
         </div>
         <h2 className="text-xl font-semibold mb-4">백테스트 설정</h2>
@@ -196,7 +209,7 @@ function Setup({ selectedStocks, setSelectedStocks }) {
         </div>
       </div>
 
-    </div>
+    </div >
   )
 }
 
