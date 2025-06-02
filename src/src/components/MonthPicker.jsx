@@ -14,8 +14,12 @@ export default function MonthPicker({ label = "📅 월 선택", value, onChange
 
   const handleSelect = (monthIndex) => {
     const newDate = new Date(year, monthIndex, 1);
+    const yyyy = newDate.getFullYear();
+    const mm = String(newDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(newDate.getDate()).padStart(2, '0');
+    const formatted = `${yyyy}-${mm}-${dd}`;
     setSelectedDate(newDate);
-    onChange?.(newDate.toISOString()); // 부모로 날짜 전달
+    onChange?.(formatted);
   };
 
   return (
@@ -47,11 +51,10 @@ export default function MonthPicker({ label = "📅 월 선택", value, onChange
               <button
                 key={idx}
                 onClick={() => handleSelect(idx)}
-                className={`py-2 rounded-md text-sm font-medium transition-all ${
-                  selectedDate.getFullYear() === year && selectedDate.getMonth() === idx
+                className={`py-2 rounded-md text-sm font-medium transition-all ${selectedDate.getFullYear() === year && selectedDate.getMonth() === idx
                     ? "bg-blue-500 text-white"
                     : "bg-gray-100 text-gray-800 hover:bg-blue-100"
-                }`}
+                  }`}
               >
                 {m}
               </button>

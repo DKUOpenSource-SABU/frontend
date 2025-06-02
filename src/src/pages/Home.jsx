@@ -17,6 +17,7 @@ function Home() {
   useEffect(() => {
     if (currentPath === '/home') {
       setSelectedStocks([]);
+      setBacktestData(null);
       setRatio([]);
       setData(null);
       setProgress(0);
@@ -24,9 +25,8 @@ function Home() {
     if (currentPath !== '/loading') {
       return;
     }
-    if (progress >= 100) {
+    if (currentPath === '/result') {
       setProgress(0);
-      setCurrentPath('/result');
       return;
     }
 
@@ -51,7 +51,6 @@ function Home() {
       {currentPath === '/result' && <Result selectedStocks={selectedStocks} backTestData={backtestData} />}
       {currentPath === '/home' && (
         <div className="flex flex-col items-center justify-center mt-12">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">현재 리더보드</h2>
           <LeaderboardTicker />
         </div>
       )}

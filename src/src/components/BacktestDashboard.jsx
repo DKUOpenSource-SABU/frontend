@@ -18,11 +18,10 @@ ChartJS.register(LineElement, BarElement, CategoryScale, LinearScale, PointEleme
 
 
 export default function BacktestDashboard({ strategies }) {
-  strategies = strategies.sort((a, b) => b.total_return - a.total_return);
+  if (strategies) {
+    strategies = strategies.sort((a, b) => b.total_return - a.total_return);
+  }
   const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const bestIndex = strategies.reduce((maxIdx, cur, idx, arr) =>
-    cur.total_return > arr[maxIdx].total_return ? idx : maxIdx, 0);
 
   const {
     initial_balance,

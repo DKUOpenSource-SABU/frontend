@@ -32,6 +32,12 @@ function ClusterView({ selectedStocks }) {
   }, []);
 
   useEffect(() => {
+    if (ratio.length < 4) {
+      setScore(null);
+      setFullStars(0);
+      setEmptyStars(5);
+      return ;
+    }
     const fetchData = ratio.map((item) => {
       return {
         ticker: item.symbol,
