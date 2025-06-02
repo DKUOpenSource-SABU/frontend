@@ -218,7 +218,7 @@ function TickerDetail({ selectedStocks }) {
             <div className='mb-6'>
               {loading ? <Spinner /> : (
                 <ul className="space-y-2 overflow-auto max-h-36 p-2">
-                  {currentData.news.results && currentData.news.results.length > 0 ? (currentData.news.results).map((news, idx) => (
+                  {currentData && currentData.news && currentData.news.results && currentData.news.results.length > 0 ? (currentData.news.results).map((news, idx) => (
                     <li
                       key={idx}
                       className="text-sm shadow p-3 rounded-lg hover:bg-gray-50 cursor-default space-y-2"

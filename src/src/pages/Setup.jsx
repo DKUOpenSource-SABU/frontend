@@ -7,7 +7,7 @@ import { useCluster } from '../contexts/ClusterContext'
 import TickerDetail from '../components/TickerDetail';
 import ClusterView from '../components/ClusterView';
 import MonthPicker from '../components/MonthPicker';
-import { format, parseISO } from "date-fns";
+import { toast } from 'react-toastify';
 
 
 const colorClasses = [
@@ -54,27 +54,36 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
   const handleSubmit = async () => {
     console.log('Form Data:', formData);
     if (!formData.startDate || !formData.endDate || !formData.initialCapital || !formData.commission) {
-      alert('모든 필드를 입력해주세요.');
+      toast.error('모든 필드를 입력해주세요.');
       return;
     }
     if (new Date(formData.startDate) >= new Date(formData.endDate)) {
-      alert('시작 날짜는 종료 날짜보다 이전이어야 합니다.');
+      toast.error('시작 날짜는 종료 날짜보다 이전이어야 합니다.');
       return;
     }
     if (selectedStocks.length === 0) {
-      alert('종목을 선택해주세요.');
+      toast.error('종목을 선택해주세요.');
+      return;
+    }
+    if (selectedStocks.length < 2) {
+      toast.error('포트폴리오는 2개 이상의 종목이 필요합니다.');
       return;
     }
     const totalRatio = ratio.reduce((sum, r) => sum + Number(r.ratio), 0);
     if (ratio.some(r => Number(r.ratio) === 0)) {
-      alert('비율이 0인 종목은 선택할 수 없습니다.');
+      toast.error('비율이 0인 종목은 선택할 수 없습니다.');
       return;
     }
     if (totalRatio !== 100) {
       console.log('Total Ratio:', ratio);
-      alert('비율의 합이 100이 되어야 합니다.');
+      toast.error('비율의 합이 100이 되어야 합니다.');
       return;
     }
+    if (formData.commission < 0 || formData.commission > 100) {
+      toast.error('수수료는 0에서 100 사이의 숫자여야 합니다.');
+      return;
+    }
+
     try {
       // API 호출
       console.log(selectedStocks, ratio);
@@ -85,13 +94,17 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
       callAPI('/backtest', 'POST', {
         initial_cash: formData.initialCapital,
         commission: formData.commission,
-        start_date: format(parseISO(formData.startDate), "yyyy-MM-dd"),
-        end_date: format(parseISO(formData.endDate), "yyyy-MM-dd"),
+        start_date: formData.startDate,
+        end_date: formData.endDate,
         rebalance: 'none',
         portfolio: portfolio
       }).then((res) => {
         setBacktestData(res.results);
+        setCurrentPath('/result');
       }).catch((err) => {
+
+        setCurrentPath('/setup');
+        alert('백테스트에 실패했습니다. 종목과 비율을 확인해주세요.');
         console.error('Error backtest data:', err);
       });
       setCurrentPath('/loading');
@@ -111,7 +124,7 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
   }, [selectedStocks]);
 
   return (
-    <div className="opacity-0 animate-[fadeIn_0.4s_ease-out_forwards] z-0"> {/* 혹은 pt-[height]로 맞춰도 됨 */}
+    <div className="opacity-0 animate-[fadeIn_0.4s_ease-out_forwards] z-0">
       <div className="w-full max-w-5xl mx-auto px-6">
         <TickerDetail selectedStocks={selectedStocks} />
         <div className='flex flex-wrap justify-between mx-auto mt-8 w-full '>
@@ -143,6 +156,10 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
                     max="100"
                     onChange={(e) => {
                       const updatedValue = Number(e.target.value);
+                      if (isNaN(updatedValue) || updatedValue < 0 || updatedValue > 100) {
+                        alert('비율은 0에서 100 사이의 숫자여야 합니다.');
+                        return;
+                      }
                       updateRatio(item.SYMBOL, updatedValue);
                     }}
                   />

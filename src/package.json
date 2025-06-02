@@ -33,6 +33,7 @@
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
     "react-tailwindcss-datepicker": "^2.0.0",
+    "react-toastify": "^11.0.5",
     "react-tooltip": "^4.5.1",
     "zustand": "^5.0.4"
   },

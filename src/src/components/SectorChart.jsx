@@ -31,7 +31,7 @@ const SectorScatterChart = ({ sectorData }) => {
       data: [{ x: s.PC1, y: s.PC2, sector: s.sector }],
       backgroundColor: colors[i % colors.length],
       pointRadius: 25,
-      pointHoverRadius: 12
+      pointHoverRadius: 30
     }))
   };
 
