@@ -46,6 +46,9 @@ const LeaderboardTicker = () => {
                 <div className="flex">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2 capitalize">
                     {item.strategy.strategy} 전략
+                    {item.strategy.rebalance !== "none" && (
+                      <span className="text-xs text-gray-500 ml-2">({item.strategy.rebalance} 리밸런싱)</span>
+                    )}
                   </h3>
                 </div>
 
