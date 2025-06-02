@@ -4,16 +4,21 @@ import { usePath } from '../contexts/PathContext'
 import Setup from './Setup'
 import ProgressBar from '../components/ProgressBar'
 import Result from './Result'
+import { useCluster } from '../contexts/ClusterContext'
+import LeaderboardTicker from '../components/LeaderboardTicker'
 
 function Home() {
   const [selectedStocks, setSelectedStocks] = useState([])
   const { currentPath, setCurrentPath } = usePath()
   const [progress, setProgress] = useState(0);
   const [backtestData, setBacktestData] = useState();
+  const { setRatio, setData } = useCluster();
 
   useEffect(() => {
     if (currentPath === '/home') {
       setSelectedStocks([]);
+      setRatio([]);
+      setData(null);
       setProgress(0);
     }
     if (currentPath !== '/loading') {
@@ -44,6 +49,12 @@ function Home() {
       {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} setBacktestData={setBacktestData} />}
       {currentPath === '/loading' && <ProgressBar progress={progress} />}
       {currentPath === '/result' && <Result selectedStocks={selectedStocks} backTestData={backtestData} />}
+      {currentPath === '/home' && (
+        <div className="flex flex-col items-center justify-center mt-12">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">현재 리더보드</h2>
+          <LeaderboardTicker />
+        </div>
+      )}
     </div>
   );
 }

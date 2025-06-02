@@ -1,7 +1,8 @@
 import React from 'react';
+import LeaderboardTicker from './LeaderboardTicker';
 
 const ProgressBar = ({ progress = 90 }) => {
-  
+
   return (
     <div className="mt-12 flex flex-col justify-center opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]">
       <div className="w-10 h-10 mx-auto border-4 border-[#00324D] border-t-transparent rounded-full animate-spin"></div>
@@ -19,6 +20,10 @@ const ProgressBar = ({ progress = 90 }) => {
 
         </div>
       </div>
+      <div className='flex justify-center'>
+        <h2 className='text-xl font-semibold text-gray-900 mb-2 mt-5'>현재 리더보드</h2>
+      </div>
+      <LeaderboardTicker />
     </div>
   );
 };

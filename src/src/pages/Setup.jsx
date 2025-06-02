@@ -6,6 +6,8 @@ import { callAPI } from '../api/axiosInstance'
 import { useCluster } from '../contexts/ClusterContext'
 import TickerDetail from '../components/TickerDetail';
 import ClusterView from '../components/ClusterView';
+import MonthPicker from '../components/MonthPicker';
+import { format, parseISO } from "date-fns";
 
 
 const colorClasses = [
@@ -21,8 +23,8 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
   const { setCurrentPath } = usePath()
   const { setData, ratio, updateRatio, setRatio } = useCluster();
   const [formData, setFormData] = useState({
-    startDate: '',
-    endDate: '',
+    startDate: '2025-01-01',
+    endDate: '2025-05-01',
     initialCapital: '',
     commission: '',
   });
@@ -35,7 +37,22 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
     }));
   };
 
+  const handleStartDateChange = (date) => {
+    setFormData((prev) => ({
+      ...prev,
+      startDate: date,
+    }));
+  };
+
+  const handleEndDateChange = (date) => {
+    setFormData((prev) => ({
+      ...prev,
+      endDate: date,
+    }));
+  };
+
   const handleSubmit = async () => {
+    console.log('Form Data:', formData);
     if (!formData.startDate || !formData.endDate || !formData.initialCapital || !formData.commission) {
       alert('모든 필드를 입력해주세요.');
       return;
@@ -60,20 +77,22 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
     }
     try {
       // API 호출
+      console.log(selectedStocks, ratio);
+      const portfolio = selectedStocks.map(stock => ({
+        ticker: stock.SYMBOL,
+        weight: ratio.find(r => r.symbol === stock.SYMBOL)?.ratio || 0
+      }));
       callAPI('/backtest', 'POST', {
-        inital_cash: formData.initialCapital,
+        initial_cash: formData.initialCapital,
         commission: formData.commission,
-        start_date: formData.startDate,
-        end_date: formData.endDate,
+        start_date: format(parseISO(formData.startDate), "yyyy-MM-dd"),
+        end_date: format(parseISO(formData.endDate), "yyyy-MM-dd"),
         rebalance: 'none',
-        portfolio: selectedStocks.map(stock => ({
-          ticker: stock.SYMBOL,
-          weight: ratio.find(r => r.symbol === stock.SYMBOL)?.ratio || 0
-        })).then((portfolio) => {
-          setBacktestData(portfolio);
-        }).catch((err) => {
-          console.error('Error backtest data:', err);
-        })
+        portfolio: portfolio
+      }).then((res) => {
+        setBacktestData(res.results);
+      }).catch((err) => {
+        console.error('Error backtest data:', err);
       });
       setCurrentPath('/loading');
     } catch (error) {
@@ -148,26 +167,19 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
           </div>
         </div>
         <h2 className="text-xl font-semibold mb-4">백테스트 설정</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">시작 날짜</label>
-            <input
-              type="date"
-              name="startDate"
+        <div className="grid grid-cols-2 gap-4 w-full pb-42">
+          <div className="w-full">
+            <MonthPicker
+              label="📅 시작 월"
               value={formData.startDate}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              onChange={handleStartDateChange}
             />
           </div>
-
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">종료 날짜</label>
-            <input
-              type="date"
-              name="endDate"
+          <div className="w-full">
+            <MonthPicker
+              label="📅 종료 월"
               value={formData.endDate}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              onChange={handleEndDateChange}
             />
           </div>
 
