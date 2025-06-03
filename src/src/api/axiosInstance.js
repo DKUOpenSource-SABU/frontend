@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  //baseURL: 'https://api.sabu.o-r.kr',  // AWS 주소
-  baseURL: 'http://localhost:8000',  // AWS 주소
+  baseURL: 'https://api.sabu.o-r.kr',  // AWS 주소
+  // baseURL: 'http://localhost:8000',  // AWS 주소
   timeout: 20000
 });
 
