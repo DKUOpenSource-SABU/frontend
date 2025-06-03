@@ -32,7 +32,7 @@ function ClusterView({ selectedStocks }) {
   }, []);
 
   useEffect(() => {
-    if (ratio.length < 4) {
+    if (ratio.length < 2) {
       setScore(null);
       setFullStars(0);
       setEmptyStars(5);
@@ -66,7 +66,7 @@ function ClusterView({ selectedStocks }) {
       <div className="flex items-center justify-between">
         <span className="text-lg font-semibold text-gray-700 py-1">클러스터링 결과</span>
         <div className="flex items-center justify-end">
-          {score === null ? (<div className="text-xs text-gray-400">4개 이상의 종목을 담으면 여기에 점수가 표시됩니다.</div>) : (
+          {score === null ? (<div className="text-xs text-gray-400">2개 이상의 종목을 담으면 여기에 점수가 표시됩니다.</div>) : (
             <>
               <span className="text-gray-700 font-medium text-sm mr-1">클러스터링 점수</span>
 
