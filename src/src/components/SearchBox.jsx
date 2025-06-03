@@ -133,7 +133,7 @@ function SearchBox({ currentPath, onSearchSubmit, setCurrentPath, selectedStock 
   }
 
   // `/loading` 또는 `/result`일 때는 아무것도 렌더링하지 않음
-  if (currentPath === '/loading' || currentPath === '/result') return null
+  if (currentPath === '/loading' || currentPath === '/result' || currentPath === '/fetched') return null
 
   return (
     <div className="w-full px-4 py-6">

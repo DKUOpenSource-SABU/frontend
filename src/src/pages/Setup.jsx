@@ -91,7 +91,7 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
         ticker: stock.SYMBOL,
         weight: ratio.find(r => r.symbol === stock.SYMBOL)?.ratio || 0
       }));
-      callAPI('/backtest', 'POST', {
+      callAPI('/backtest/', 'POST', {
         initial_cash: formData.initialCapital,
         commission: formData.commission,
         start_date: formData.startDate,
@@ -100,7 +100,7 @@ function Setup({ selectedStocks, setSelectedStocks, setBacktestData }) {
         portfolio: portfolio
       }).then((res) => {
         setBacktestData(res.results);
-        setCurrentPath('/result');
+        setCurrentPath('/fetched');
       }).catch((err) => {
 
         setCurrentPath('/setup');

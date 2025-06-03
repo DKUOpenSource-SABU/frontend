@@ -20,9 +20,6 @@ const ProgressBar = ({ progress = 90 }) => {
 
         </div>
       </div>
-      <div className='flex justify-center'>
-      </div>
-      <LeaderboardTicker />
     </div>
   );
 };

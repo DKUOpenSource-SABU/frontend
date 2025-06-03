@@ -22,10 +22,11 @@ function Home() {
       setData(null);
       setProgress(0);
     }
-    if (currentPath !== '/loading') {
+    if (currentPath !== '/fetched' && currentPath !== '/loading') {
       return;
     }
-    if (currentPath === '/result') {
+    if (progress >= 100 && currentPath === '/fetched') {
+      setCurrentPath('/result');
       setProgress(0);
       return;
     }
@@ -47,7 +48,7 @@ function Home() {
     <div className="">
       <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath}  selectedStock={selectedStocks}/>
       {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} setBacktestData={setBacktestData} />}
-      {currentPath === '/loading' && <ProgressBar progress={progress} />}
+      {(currentPath === '/loading' || currentPath === '/fetched') && <ProgressBar progress={progress} />}
       {currentPath === '/result' && <Result selectedStocks={selectedStocks} backTestData={backtestData} />}
       {currentPath === '/home' && (
         <div className="flex flex-col items-center justify-center mt-12">
