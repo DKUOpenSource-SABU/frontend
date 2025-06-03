@@ -54,7 +54,7 @@ export default function LineCloseChart({ stockData }) {
 
     scales: {
       x: {
-        type: 'time', // ⏰ 시간 기반 X축
+        type: 'time', // 시간 기반 X축
         time: {
           unit: 'month', // 일 단위
           tooltipFormat: 'yyyy-MM-dd',
