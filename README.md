@@ -58,7 +58,7 @@ React 기반으로 개발되었으며, REST API를 통해 백엔드와 통신합
   주요 UI 컴포넌트들의 역할, props 구조, 사용 위치 등을 정리한 문서입니다.
 
 - 🔄 **[state-flow.md](./docs/state-flow.md)**  
-  Zustand 또는 Redux 기반의 상태 관리 구조와 흐름도를 설명합니다.
+  UseContext기반의 상태 관리 구조와 흐름도를 설명합니다.
 
 
 ## 🛠️ 빌드 및 실행 방법
