@@ -4,19 +4,30 @@ import { usePath } from '../contexts/PathContext'
 import Setup from './Setup'
 import ProgressBar from '../components/ProgressBar'
 import Result from './Result'
+import { useCluster } from '../contexts/ClusterContext'
+import LeaderboardTicker from '../components/LeaderboardTicker'
 
 function Home() {
   const [selectedStocks, setSelectedStocks] = useState([])
   const { currentPath, setCurrentPath } = usePath()
   const [progress, setProgress] = useState(0);
+  const [backtestData, setBacktestData] = useState();
+  const { setRatio, setData } = useCluster();
 
   useEffect(() => {
-    if (currentPath !== '/loading') {
+    if (currentPath === '/home') {
+      setSelectedStocks([]);
+      setBacktestData(null);
+      setRatio([]);
+      setData(null);
+      setProgress(0);
+    }
+    if (currentPath !== '/fetched' && currentPath !== '/loading') {
       return;
     }
-    if (progress >= 100) {
-      setProgress(0);
+    if (progress >= 100 && currentPath === '/fetched') {
       setCurrentPath('/result');
+      setProgress(0);
       return;
     }
 
@@ -35,10 +46,15 @@ function Home() {
 
   return (
     <div className="">
-      <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath} />
-      {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} />}
-      {currentPath === '/loading' && <ProgressBar progress={progress} />}
-      {currentPath === '/result' && <Result selectedStocks={selectedStocks} />}
+      <SearchBox currentPath={currentPath} onSearchSubmit={handleAddStock} setCurrentPath={setCurrentPath}  selectedStock={selectedStocks}/>
+      {currentPath === '/setup' && <Setup selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} setBacktestData={setBacktestData} />}
+      {(currentPath === '/loading' || currentPath === '/fetched') && <ProgressBar progress={progress} />}
+      {currentPath === '/result' && <Result selectedStocks={selectedStocks} backTestData={backtestData} />}
+      {currentPath === '/home' && (
+        <div className="flex flex-col items-center justify-center mt-12">
+          <LeaderboardTicker />
+        </div>
+      )}
     </div>
   );
 }

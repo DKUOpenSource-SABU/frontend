@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000',  // 👉 FastAPI 주소
-  timeout: 5000
+  baseURL: 'https://api.sabu.o-r.kr',  // AWS 주소
+  // baseURL: 'http://localhost:8000',  // AWS 주소
+  timeout: 20000
 });
 
 export async function callAPI(endpoint, method = 'GET', data = null, config = {}) {
