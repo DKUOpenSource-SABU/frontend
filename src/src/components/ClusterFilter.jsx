@@ -5,8 +5,8 @@ const colorClasses = [
   'bg-blue-400',
   'bg-yellow-400',
   'bg-green-400',
-  'bg-purple-400',
-  'bg-orange-400',
+  // 'bg-purple-400',
+  // 'bg-orange-400',
 ];
 
 const ClusterFilter = ({ onFilterChange }) => {
