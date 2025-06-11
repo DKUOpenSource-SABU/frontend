@@ -3,6 +3,8 @@
 이 디렉토리는 SABU 프로젝트에서 사용자 인터페이스(UI)를 담당하는 **프론트엔드 애플리케이션**입니다.  
 React 기반으로 개발되었으며, REST API를 통해 백엔드와 통신합니다.
 
+> gh-pages로 현재 배포가 되어 [배포 링크](https://dkuopensource-sabu.github.io/frontend/)로 언제든지 접속이 가능합니다. 다만, 프론트엔드와 연결되는 백엔드가 배포되어 있지 않기 때문에 정상적인 내용을 확인할 수 없습니다. 관련 내용은 [기능 시연 이미지](https://github.com/DKUOpenSource-SABU) 혹은 직접 배포를 따라하여 보시길 바랍니다.
+
 ## 🌐 주요 기능
 
 - 프로젝트/서비스 대시보드
@@ -130,4 +132,3 @@ const axiosInstance = axios.create({
 
 export default axiosInstance;
 ```
-
