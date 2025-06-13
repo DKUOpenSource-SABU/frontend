@@ -3,7 +3,7 @@
 이 디렉토리는 SABU 프로젝트에서 사용자 인터페이스(UI)를 담당하는 **프론트엔드 애플리케이션**입니다.  
 React 기반으로 개발되었으며, REST API를 통해 백엔드와 통신합니다.
 
-> gh-pages로 현재 배포가 되어 [배포 링크](https://dkuopensource-sabu.github.io/frontend/)로 언제든지 접속이 가능합니다. 다만, 프론트엔드와 연결되는 백엔드가 배포되어 있지 않기 때문에 정상적인 내용을 확인할 수 없습니다. 관련 내용은 [기능 시연 이미지](https://github.com/DKUOpenSource-SABU) 혹은 직접 배포를 따라하여 보시길 바랍니다.
+> gh-pages로 현재 배포가 되어 [배포 링크](https://dkuopensource-sabu.github.io/frontend/)로 언제든지 접속이 가능합니다. 다만, 프론트엔드와 연결되는 백엔드가 성능상의 이유로 로컬 호스트로 프록스 하는 방식으로 배포되어 있기 때문에 현재 정상적인 내용을 확인할 수 없습니다. 관련 내용은 [기능 시연 이미지](https://github.com/DKUOpenSource-SABU) 혹은 직접 배포를 따라하여 보시길 바랍니다. 배포와 관련된 이야기는 [백엔드 배포 문서](https://github.com/DKUOpenSource-SABU/backend/blob/main/docs/deployment.md)에서 확인하실 수 있습니다.
 
 ## 🌐 주요 기능
 
